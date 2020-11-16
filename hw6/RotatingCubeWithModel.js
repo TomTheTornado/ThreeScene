@@ -29,7 +29,7 @@ function loadOBJPromise(filename)
   );
 }
 
-modelFilename = "../models/batman.obj";
+modelFilename = "../models/batarang.obj";
 
 
 var path = "../images/winter/winterskyday";
@@ -174,6 +174,16 @@ function handleKeyPress(event)
     var ourCubeMap = new THREE.CubeTextureLoader().load( imageNames );
     // this is too easy, don't need a mesh or anything
     scene.background = ourCubeMap;
+    geometry = new THREE.SphereGeometry(1, 48, 24);
+    geometry.computeFlatVertexNormals();
+    material = new THREE.MeshBasicMaterial({color : 0xffffff, envMap : ourCubeMap});
+    material.wireframe = false;
+    sphere = new THREE.Mesh( geometry, material );
+    sphere.position.set(0, 3, 0);
+    sphere.name = "mirror";
+    var sphereObject = scene.getObjectByName("mirror");
+    scene.remove(sphereObject);
+    scene.add(sphere);
     break;
   case '2':
     path = "../images/stars/Stargate";
@@ -182,6 +192,16 @@ function handleKeyPress(event)
       var ourCubeMap = new THREE.CubeTextureLoader().load( imageNames );
       // this is too easy, don't need a mesh or anything
       scene.background = ourCubeMap;
+      geometry = new THREE.SphereGeometry(1, 48, 24);
+      geometry.computeFlatVertexNormals();
+      material = new THREE.MeshBasicMaterial({color : 0xffffff, envMap : ourCubeMap});
+      material.wireframe = false;
+      sphere = new THREE.Mesh( geometry, material );
+      sphere.position.set(0, 3, 0);
+      sphere.name = "mirror";
+      var sphereObject = scene.getObjectByName("mirror");
+      scene.remove(sphereObject);
+      scene.add(sphere);
     break;
     default:
       return;
@@ -194,19 +214,22 @@ async function start()
   var ourCanvas = document.getElementById('theCanvas');
   var renderer = new THREE.WebGLRenderer({canvas: ourCanvas});
 
-  // key handler as usual
-  window.onkeypress = handleKeyPress;
-
   // create a scene and camera
   scene = new THREE.Scene();
   camera = new THREE.PerspectiveCamera( 30, 1.5, 0.1, 1000 );
-  camera.position.x = 2;
-  camera.position.y = 2;
-  camera.position.z = 5;
-  camera.lookAt(new THREE.Vector3(0, 0, 0));
-
+  camera.position.x = 6;
+  camera.position.y = 6;
+  camera.position.z = 6;
+  camera.lookAt(new THREE.Vector3(0, 1.5, 0));
+  
+  // key handler as usual
+  window.onkeypress = handleKeyPress;
+  
+  var url = "../images/metal.jpg";
+  var loader = new THREE.TextureLoader();
+  var texture = loader.load(url);
   // choose a model, possibly loading one from the named file
-  var geometry = await loadOBJPromise(modelFilename)
+  var geometry = await loadOBJPromise(modelFilename);
 
   // Choose a geometry
   //var geometry = new THREE.PlaneGeometry( 1, 1 );
@@ -216,7 +239,7 @@ async function start()
   // Choose a material:
   //var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
   //var material = new THREE.MeshLambertMaterial( { color: 0x00ff00 } );
-  var material = new THREE.MeshPhongMaterial( { color: 0x00ff00, specular: 0x222222, shininess: 50} );
+  var material = new THREE.MeshPhongMaterial( { map:texture, color: 0xffffff, specular: 0x222222, shininess: 50} );
 
   // Note: we can make the PhongMaterial use face normals by selecting FlatShading
   //var material = new THREE.MeshPhongMaterial( { color: 0x00ff00, specular: 0x222222, shininess: 50, shading: THREE.FlatShading} );
@@ -226,6 +249,8 @@ async function start()
 
   // Add it to the scene
   scene.add(cube);
+
+
 
 
   // Make some axes, this will be a Line instead of a Mesh
@@ -272,6 +297,29 @@ async function start()
 
   // this is too easy, don't need a mesh or anything
   scene.background = ourCubeMap;
+
+  
+  // put another object in the scene
+  //geometry = new THREE.SphereGeometry(1);
+  geometry = new THREE.SphereGeometry(1, 48, 24);
+  // replaces vertex normals with face normals
+  geometry.computeFlatVertexNormals();
+  // to make it look reflective, set the envMap property
+  // we can also set the base color or reflectivity (default 1.0)
+  material = new THREE.MeshBasicMaterial({color : 0xffffff, envMap : ourCubeMap});
+  //material = new THREE.MeshBasicMaterial({color : 0x00ff00, envMap : ourCubeMap, reflectivity : .7});
+  // (Note: to get refraction need to set mapping property to THREE.CubeRefractionMapping, see below.)
+  //ourCubeMap.mapping = THREE.CubeRefractionMapping;
+  //material = new THREE.MeshBasicMaterial({color : 0xffffff, envMap : ourCubeMap,  refractionRatio : .8});
+  material.wireframe = false;
+  var sphere = new THREE.Mesh( geometry, material );
+  sphere.name = "mirror";
+  sphere.position.set(0, 3, 0);
+  scene.add(sphere);
+  
+
+
+
 
   var render = function () {
     renderer.render(scene, camera);

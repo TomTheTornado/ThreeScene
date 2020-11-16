@@ -4,7 +4,7 @@
 //
 
 // a couple of example cube maps
-var path = "../images/park/";
+var path = "../images/winter/winterskyday";
 ////var path = "../images/sky/";
 var imageNames = [
                   path + "px.jpg",
