@@ -2,6 +2,34 @@
 // Skybox using Three.js.
 //
 
+// Helper function similar to loadOBJPromise in
+// cs336util.js, for synchronously loading an
+// OBJ file
+function loadOBJPromise(filename)
+{
+  var doResolve;
+  var callback = function(loadedModel, materials)
+  {
+    // assume only one object in the .obj file
+    var child = loadedModel.children[0];
+
+    // for the new (2015) obj file loader, this is an instance
+    // of THREE.BufferGeometry
+    var geometry = child.geometry;
+    doResolve(geometry);
+  };
+
+  return new Promise(function (resolve) {
+    doResolve = resolve; // move into outer scope
+    var objLoader = new THREE.OBJLoader();
+    objLoader.load(modelFilename, callback);
+    }
+  );
+}
+
+modelFilename = "../models/batman.obj";
+
+
 var path = "../images/winter/winterskyday";
 //var path = "../images/stars/Stargate";
 ////var path = "../images/sky/";
@@ -123,15 +151,28 @@ function handleKeyPress(event)
   if (cameraControl(camera, ch)) return;
 }
 
-function start()
+async function start()
 {
+  var ourCanvas = document.getElementById('theCanvas');
+  var renderer = new THREE.WebGLRenderer({canvas: ourCanvas});
+
   window.onkeypress = handleKeyPress;
 
   var scene = new THREE.Scene();
   camera = new THREE.PerspectiveCamera( 45, 1.5, 0.1, 1000 );
+  camera.position.x = 2;
+  camera.position.y = 2;
+  camera.position.z = 5;
+  camera.lookAt(new THREE.Vector3(0, 0, 0));
 
-  var ourCanvas = document.getElementById('theCanvas');
-  var renderer = new THREE.WebGLRenderer({canvas: ourCanvas});
+  // var geometry = await loadOBJPromise(modelFilename);
+  // var material = new THREE.MeshPhongMaterial( { color: 0x00ff00, specular: 0x222222, shininess: 50} );
+
+  // // // Create a mesh
+  // var cube = new THREE.Mesh( geometry, material );
+  // // // Add batsignal to the scene
+  // scene.add(cube);
+
 
   // load the six images
   var ourCubeMap = new THREE.CubeTextureLoader().load( imageNames );

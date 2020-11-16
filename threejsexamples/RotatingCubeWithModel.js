@@ -29,7 +29,7 @@ function loadOBJPromise(filename)
   );
 }
 
-modelFilename = "../models/teapot.obj";
+modelFilename = "../models/batman.obj";
 
 var axis = 'z';
 var paused = false;
