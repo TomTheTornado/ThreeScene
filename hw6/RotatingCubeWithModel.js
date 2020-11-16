@@ -253,6 +253,40 @@ async function start()
 
 
 
+  //BatSignal
+  var materialBlack = new THREE.MeshPhongMaterial( { map:texture, color: 0x989898, specular: 0x222222, shininess: 50} );
+  var geometryCylinder = new THREE.CylinderBufferGeometry(1, 1, 1, 12); //for shaft
+  //var geometryDodecahedron = new THREE.DodecahedronBufferGeometry(1);//for rotor hub
+  //var geometryCone = new THREE.ConeBufferGeometry(0.5, 1, 12); //for blades
+  
+  // base is parent of base and housing dummy
+  baseDummy = new THREE.Object3D();
+  var base = new THREE.Mesh( geometryCylinder, materialBlack );
+  base.scale.set(0.75, 0.3, 0.75);
+  baseDummy.add(base);
+
+  //housingDummy is parent of housing and rotor dummy
+  housingDummy = new THREE.Object3D();
+  baseDummy.add(housingDummy);
+  housingDummy.position.set(0, 9, 0);
+  var housing = new THREE.Mesh( geometryCylinder, materialBlack );
+  housingDummy.add(housing);
+  housing.scale.set(3.5, 3.5, 7);
+  housing.position.set(0, 0, 0);
+
+  //rotorDUmmy is parent of rotor and blade dummies
+  rotorDummy = new THREE.Object3D();
+  housingDummy.add(rotorDummy);
+  rotorDummy.position.set(0, 0, 0);
+  var rotor = new THREE.Mesh( geometryCylinder, materialBlack );
+  rotorDummy.add(rotor);
+  rotor.scale.set(2, 2, 2);
+  rotor.position.set(0, 0, 5);
+
+  scene.add(baseDummy);
+
+
+
   // Make some axes, this will be a Line instead of a Mesh
   var material = new THREE.LineBasicMaterial({color: 0xff0000});
   var geometry = new THREE.Geometry();
@@ -280,6 +314,9 @@ async function start()
   );
   line = new THREE.Line( geometry, material );
   scene.add( line );
+
+
+
 
   // Put a point light in the scene
   var light = new THREE.PointLight(0xffffff, 1.0);
