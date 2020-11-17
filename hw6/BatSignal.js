@@ -31,7 +31,7 @@ function loadOBJPromise(filename)
 }
 
 batarangFile = "../models/batarang.obj";
-logoFile = "../models/66logo.obj"
+logoFile = "../models/logo66.obj"
 
 var OFFSCREEN_SIZE = 512;
 
@@ -46,12 +46,11 @@ var imageNames = [
                   path + "bk.bmp"
                   ];
 var axis = 'y';
+var logoColor = 'g';
 var paused = false;
 var camera;
 var scene;
 
-var d = new Date();
-var colorShift = d.getTime() / 2000;
 
 //translate keypress events to strings
 //from http://javascript.info/tutorial/keyboard-events
@@ -192,16 +191,6 @@ function handleKeyPress(event)
     var ourCubeMap = new THREE.CubeTextureLoader().load( imageNames );
     // this is too easy, don't need a mesh or anything
     scene.background = ourCubeMap;
-    // geometry = new THREE.SphereGeometry(1, 48, 24);
-    // geometry.computeFlatVertexNormals();
-    // material = new THREE.MeshBasicMaterial({color : 0xffffff, envMap : ourCubeMap});
-    // material.wireframe = false;
-    // sphere = new THREE.Mesh( geometry, material );
-    // sphere.position.set(0, 3, 0);
-    // sphere.name = "mirror";
-    // var sphereObject = scene.getObjectByName("mirror");
-    // scene.remove(sphereObject);
-    // scene.add(sphere);
     break;
   case '2':
     path = "../images/stars/Stargate";
@@ -210,16 +199,21 @@ function handleKeyPress(event)
       var ourCubeMap = new THREE.CubeTextureLoader().load( imageNames );
       // this is too easy, don't need a mesh or anything
       scene.background = ourCubeMap;
-      // geometry = new THREE.SphereGeometry(1, 48, 24);
-      // geometry.computeFlatVertexNormals();
-      // material = new THREE.MeshBasicMaterial({color : 0xffffff, envMap : ourCubeMap});
-      // material.wireframe = false;
-      // sphere = new THREE.Mesh( geometry, material );
-      // sphere.position.set(0, 3, 0);
-      // sphere.name = "mirror";
-      // var sphereObject = scene.getObjectByName("mirror");
-      // scene.remove(sphereObject);
-      // scene.add(sphere);
+    break;
+  case '3':
+    logoColor = 'g';
+    break;
+  case '4':
+    logoColor = 'y';
+    break;
+  case '5':
+    logoColor = 'b';
+    break;
+  case '6':
+    logoColor = 'r';
+    break;
+  case '7':
+    logoColor = 'p';
     break;
     default:
       return;
@@ -235,7 +229,7 @@ async function start()
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   
   rtTexture = new THREE.WebGLRenderTarget( OFFSCREEN_SIZE, OFFSCREEN_SIZE, { minFilter: THREE.LinearFilter, magFilter: THREE.NearestFilter, format: THREE.RGBAFormat } );
-  // Set up the scene to render to texture, this code is just copied from RotatingSquare.js
+  // Set up the scene to render to texture, for framebuffer
   cameraRTT = new THREE.PerspectiveCamera( 30, 1.5, 0.1, 1000 );
   cameraRTT.position.x = 0;
   cameraRTT.position.y = 5;
@@ -247,10 +241,10 @@ async function start()
   // create a scene and camera
   scene = new THREE.Scene();
   camera = new THREE.PerspectiveCamera( 30, 1.5, 0.1, 1000 );
-  camera.position.x = 8;
-  camera.position.y = 5;
-  camera.position.z = -10;
-  camera.lookAt(new THREE.Vector3(1, 2.5, 0));
+  camera.position.x = 16;
+  camera.position.y = 8;
+  camera.position.z = -13;
+  camera.lookAt(new THREE.Vector3(1, 4, 0));
   
   // key handler as usual
   window.onkeypress = handleKeyPress;
@@ -258,42 +252,52 @@ async function start()
   var geometryCylinder = new THREE.CylinderBufferGeometry(1, 1, 1, 16); //for shaft
   var geometryBox = new THREE.BoxGeometry(1);
   
-  var url = "../images/metal3.jpg";
+  //loading the logo to the framebuffer
+  var url = "../images/metal3.jpg"; //loading the 
   var loader = new THREE.TextureLoader();
   var texture = loader.load(url);
-  // choose a model, possibly loading one from the named file
   var geometry = await loadOBJPromise(logoFile);
   var material = new THREE.MeshPhongMaterial( { map:texture, color: 0xffff00, specular: 0x222222, shininess: 10} );
   var cube = new THREE.Mesh( geometry, material );
   cube.castShadow = true;
   cube.receiveShadow = true;
   cube.position.set(0, 5, 0);
-  // Add it to the scene
+  // Add it to the framebuffer
   sceneRTT.add(cube);
+
+
+  //wall that light gets projected onto
   var url = "../images/metal.jpg";
   texture = loader.load(url);
 
-  var boxGeometry = new THREE.BoxGeometry(1);
-  var box = new THREE.Mesh( boxGeometry, material );
-  box.scale.set(20, 10, 0.1);
-  box.position.set(0, 5, 6.5);
-  box.castShadow = true;
-  box.receiveShadow = true;
+  var planeGeometry = new THREE.PlaneGeometry(1);
+  var plane1 = new THREE.Mesh( planeGeometry, material );
+  plane1.scale.set(20, 10, 0.1);
+  plane1.position.set(0, 5, 6.5);
+  plane1.castShadow = true;
+  plane1.receiveShadow = true;
+  plane1.rotateY(180 * Math.PI / 180);
   // Add it to the scene
-  scene.add(box);
+  scene.add(plane1);
 
-
-
-  var plane = new THREE.Mesh( boxGeometry, material ); // made with boxs for proper shadow
-  plane.scale.set(18, 13, 0.1);
-  plane.position.set(0, 0, 0);
-  plane.rotateX(-90 * Math.PI / 180);
-  plane.castShadow = true;
-  plane.receiveShadow = true;
+  var url = "../images/metal3.jpg"; //loading the 
+  var loader = new THREE.TextureLoader();
+  var texture = loader.load(url);
+  var material = new THREE.MeshPhongMaterial( { map:texture, color: 0xffffff, specular: 0x222222, shininess: 10} );
+  //Floor Plane
+  var plane2 = new THREE.Mesh( planeGeometry, material ); // made with boxs for proper shadow
+  plane2.scale.set(18, 13, 0.1);
+  plane2.position.set(0, 0, 0);
+  plane2.rotateX(-90 * Math.PI / 180);
+  plane2.castShadow = true;
+  plane2.receiveShadow = true;
   // Add it to the scene
-  scene.add(plane);
+  scene.add(plane2);
 
-
+  var url = "../images/metal.jpg"; //loading the 
+  var loader = new THREE.TextureLoader();
+  var texture = loader.load(url);
+  var material = new THREE.MeshPhongMaterial( { map:texture, color: 0xffff00, specular: 0x222222, shininess: 10} );
 
 
 
@@ -305,14 +309,20 @@ async function start()
   baseDummy = new THREE.Object3D();
   var base = new THREE.Mesh( geometryCylinder, materialBlack );
   base.scale.set(1, 0.3, 1);
+  base.castShadow = true;
+  base.receiveShadow = true;
   baseDummy.add(base);
   var rod1 = new THREE.Mesh( geometryBox, materialBlack );
   rod1.position.set(-0.6, 0.6, 0);
   rod1.scale.set(0.2, 1.5, 0.6);
+  rod1.castShadow = true;
+  rod1.receiveShadow = true;
   baseDummy.add(rod1);
   var rod2 = new THREE.Mesh( geometryBox, materialBlack );
   rod2.scale.set(0.2, 1.5, 0.6);
   rod2.position.set(0.6, 0.6, 0);
+  rod2.castShadow = true;
+  rod2.receiveShadow = true;
   baseDummy.add(rod2);
 
   //rodDummy is parent of backing, cylinder, batsymbol, and light
@@ -320,12 +330,16 @@ async function start()
   rodDummy.position.set(0, 1, 0);
   baseDummy.add(rodDummy);
 
+  //gives the backing so we can't just see through the mesh
   var backing = new THREE.Mesh( geometryCylinder, materialYellow);
   backing.scale.set(0.6, 0.2, 0.6);
   backing.position.set(0, 0, -0.6);
   backing.rotateX(90 * Math.PI / 180);
+  backing.castShadow = true;
+  backing.receiveShadow = true;
   rodDummy.add(backing);
 
+  //gives the cylinder for the light
   var extrudeSettings = {amount : 2, steps : 1, bevelEnabled: false, curveSegments: 16};
   var arcShape = new THREE.Shape();
   arcShape.absarc(0, 0, 0.6, 0, Math.PI * 2, 0, false);//cylinder outside
@@ -337,9 +351,12 @@ async function start()
   var hollow = new THREE.Mesh( geometry, material );
   hollow.scale.set(1, 1, 0.6);
   hollow.position.set(0, 0, -0.5);
+  hollow.castShadow = true;
+  hollow.receiveShadow = true;
   // Add it to the scene
   rodDummy.add(hollow);
 
+  //gives it the shade for the bat symbol
   var geometry = await loadOBJPromise(batarangFile);
   var material = new THREE.MeshPhongMaterial( { map:texture, color: 0xffffff, specular: 0x222222, shininess: 50} );
   var symbol = new THREE.Mesh( geometry, material );
@@ -350,7 +367,7 @@ async function start()
   symbol.receiveShadow = true;
   rodDummy.add(symbol);
 
-
+  //spotlight for bat signal
   var spotLight = new THREE.SpotLight( 0xffffff, 1);
   var lightBeam = rodDummy.getObjectByName("symbol");
   
@@ -371,19 +388,46 @@ async function start()
 
 
 
+  //spotlight for another light
+  var spotLight2 = new THREE.SpotLight( 0x00ff00, 1);
+  
+  spotLight2.position.set(-7, 5, 5);
+  spotLight2.angle = 0.35;
+  spotLight2.distance = 160;
+  
+  spotLight2.castShadow = true;
+  spotLight2.shadow.mapSize.width = 1024;
+  spotLight2.shadow.mapSize.height = 1024;
+  spotLight2.shadow.camera.near = 0.5;
+  spotLight2.shadow.camera.far = 50;   
+  scene.add(spotLight2);
+
+
+  var spotLight3 = new THREE.SpotLight( 0xff00ff, 1);
+  
+  spotLight3.position.set(-3, 5, -4);
+  spotLight3.angle = 0.30;
+  spotLight3.distance = 160;
+  
+  spotLight3.castShadow = true;
+  spotLight3.shadow.mapSize.width = 1024;
+  spotLight3.shadow.mapSize.height = 1024;
+  spotLight3.shadow.camera.near = 0.5;
+  spotLight3.shadow.camera.far = 50;   
+  scene.add(spotLight3);
 
 
 
-  var boxGeometry = new THREE.BoxGeometry(1);
-  var material = new THREE.MeshBasicMaterial( { color: 0xffffff, map: rtTexture.texture } );
-  var box = new THREE.Mesh( boxGeometry, material );
-  box.scale.set(13, 10, 0.1);
-  box.position.set(-8.5, 5, 0);
-  box.rotateY(90 * Math.PI / 180);
-  box.castShadow = true;
-  box.receiveShadow = true;
+  //wall for framebuffer
+  var material = new THREE.MeshBasicMaterial( { color: 0xffffff, map: rtTexture.texture} );
+  var plane3 = new THREE.Mesh( planeGeometry, material );
+  plane3.scale.set(13, 10, 0.1);
+  plane3.position.set(-8.5, 5, 0);
+  plane3.rotateY(90 * Math.PI / 180);
+  plane3.castShadow = true;
+  plane3.receiveShadow = true;
   // Add it to the scene
-  scene.add(box);
+  scene.add(plane3);
 
 
   // Put a point light in the scene
@@ -405,8 +449,6 @@ async function start()
 
   
 
-  
-  renderer.setClearColor(0x00AA00);
 
 
 
@@ -421,12 +463,24 @@ async function start()
     var increment = 1 * Math.PI / 180.0;  // convert to radians
     if (!paused)
     {
-      
-      if(colorShift != d.getTime() / 2000){
-        colorShift = d.getTime() / 2000;
-        renderer.setClearColor(0x00AA00);
+      switch(logoColor){
+        case 'g':
+          renderer.setClearColor(0x00AA00);
+          break;
+        case 'y':
+          renderer.setClearColor(0xFFF82B);
+          break;
+        case 'b':
+          renderer.setClearColor(0x007BFF);
+          break;
+        case 'r':
+          renderer.setClearColor(0xDD0000);
+          break;
+        case 'p':
+          renderer.setClearColor(0xAA00AA);
+          break;
+        default:
       }
-
 
      var q, q2;
      switch(axis)

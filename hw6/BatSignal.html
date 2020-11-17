@@ -1,13 +1,14 @@
 <html>
 	<head>
-		<title>Rotating Cube with Three.js app</title>
+		<title>Bat Signal</title>
 	</head>
 	<body>
 		<canvas id="theCanvas" width="600" height="400">
 	Please use a browser that supports "canvas"
 </canvas>
-Camera controls:
+
 <ul style="list-style:none;">
+	<li>Camera Controls
 	<li>w, a, s, d - move forward, left, back, right
 	<li>r, f - move up, down
 	<li>i, j, k, l - look up, left, down, right
@@ -16,8 +17,18 @@ Camera controls:
 	<li>p - put camera at origin
 	<li>W - decrease fov
 	<li>S - increase fov
-	<li>Started with "../threejsexamples/RotatingCubeWithModel.js", modeled and added the batman symbol. I unwrapped the uv coordinates in blender and added the metal texture. I used the camera controls from the examples.
-	</ul>
+	<li><br>
+	<li>t, T - Turn the bat signal</li>
+	<li>u, U - Angle the bat signal</li>
+	<li><br>
+	<li>1, 2 - Change the skybox
+	<li><br>
+	<li>x, y, z - Change the Batman logo to rotate around the x, y, and z, axes, respectively
+	<li>3, 4, 5, 6, 7 - Change the background color behind the Batman logo
+	<li><br>
+	<li>Started with "../threejsexamples/RotatingCubeWithModel.js", I used the camera controls from the examples.
+		I added 2 variations of a skybox, a snow skybox, and a space skybox. After adding all of that I decided on making the bat signal.
+		I found the batman symbol on thingiverse and converted it to and obj and unwrapped its coordinates in blender. I modeled the batman logo in blender by converting an .svg to a mesh and extruding it. I used heirarchy to create the bat signal that way it could be adjusted easily. I added metal textures to the different objects as well. I decided to render the Batman '66 logo in the framebuffer and give the ability to change the background colors of it. I added more spotlights around the bat signal as well, this time showing off different colors of the light.
 
 	<script src="../three/three.js"></script>
   <script src="../three/OBJLoader.js"></script>
