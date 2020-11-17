@@ -33,7 +33,7 @@ function loadOBJPromise(filename)
 batarangFile = "../models/batarang.obj";
 logoFile = "../models/66logo.obj"
 
-var OFFSCREEN_SIZE = 256;
+var OFFSCREEN_SIZE = 512;
 
 var path = "../images/winter/winterskyday";
 ////var path = "../images/sky/";
@@ -49,6 +49,9 @@ var axis = 'y';
 var paused = false;
 var camera;
 var scene;
+
+var d = new Date();
+var colorShift = d.getTime() / 2000;
 
 //translate keypress events to strings
 //from http://javascript.info/tutorial/keyboard-events
@@ -189,16 +192,16 @@ function handleKeyPress(event)
     var ourCubeMap = new THREE.CubeTextureLoader().load( imageNames );
     // this is too easy, don't need a mesh or anything
     scene.background = ourCubeMap;
-    geometry = new THREE.SphereGeometry(1, 48, 24);
-    geometry.computeFlatVertexNormals();
-    material = new THREE.MeshBasicMaterial({color : 0xffffff, envMap : ourCubeMap});
-    material.wireframe = false;
-    sphere = new THREE.Mesh( geometry, material );
-    sphere.position.set(0, 3, 0);
-    sphere.name = "mirror";
-    var sphereObject = scene.getObjectByName("mirror");
-    scene.remove(sphereObject);
-    scene.add(sphere);
+    // geometry = new THREE.SphereGeometry(1, 48, 24);
+    // geometry.computeFlatVertexNormals();
+    // material = new THREE.MeshBasicMaterial({color : 0xffffff, envMap : ourCubeMap});
+    // material.wireframe = false;
+    // sphere = new THREE.Mesh( geometry, material );
+    // sphere.position.set(0, 3, 0);
+    // sphere.name = "mirror";
+    // var sphereObject = scene.getObjectByName("mirror");
+    // scene.remove(sphereObject);
+    // scene.add(sphere);
     break;
   case '2':
     path = "../images/stars/Stargate";
@@ -207,16 +210,16 @@ function handleKeyPress(event)
       var ourCubeMap = new THREE.CubeTextureLoader().load( imageNames );
       // this is too easy, don't need a mesh or anything
       scene.background = ourCubeMap;
-      geometry = new THREE.SphereGeometry(1, 48, 24);
-      geometry.computeFlatVertexNormals();
-      material = new THREE.MeshBasicMaterial({color : 0xffffff, envMap : ourCubeMap});
-      material.wireframe = false;
-      sphere = new THREE.Mesh( geometry, material );
-      sphere.position.set(0, 3, 0);
-      sphere.name = "mirror";
-      var sphereObject = scene.getObjectByName("mirror");
-      scene.remove(sphereObject);
-      scene.add(sphere);
+      // geometry = new THREE.SphereGeometry(1, 48, 24);
+      // geometry.computeFlatVertexNormals();
+      // material = new THREE.MeshBasicMaterial({color : 0xffffff, envMap : ourCubeMap});
+      // material.wireframe = false;
+      // sphere = new THREE.Mesh( geometry, material );
+      // sphere.position.set(0, 3, 0);
+      // sphere.name = "mirror";
+      // var sphereObject = scene.getObjectByName("mirror");
+      // scene.remove(sphereObject);
+      // scene.add(sphere);
     break;
     default:
       return;
@@ -233,8 +236,11 @@ async function start()
   
   rtTexture = new THREE.WebGLRenderTarget( OFFSCREEN_SIZE, OFFSCREEN_SIZE, { minFilter: THREE.LinearFilter, magFilter: THREE.NearestFilter, format: THREE.RGBAFormat } );
   // Set up the scene to render to texture, this code is just copied from RotatingSquare.js
-  cameraRTT = new THREE.OrthographicCamera(-1, 1, 1, -1, -1, 1);
+  cameraRTT = new THREE.PerspectiveCamera( 30, 1.5, 0.1, 1000 );
+  cameraRTT.position.x = 0;
   cameraRTT.position.y = 5;
+  cameraRTT.position.z = -5;
+  cameraRTT.lookAt(new THREE.Vector3(0, 5, 0));
   sceneRTT = new THREE.Scene();
   
 
@@ -261,9 +267,9 @@ async function start()
   var cube = new THREE.Mesh( geometry, material );
   cube.castShadow = true;
   cube.receiveShadow = true;
-  cube.position.set(-4, 4, 4);
+  cube.position.set(0, 5, 0);
   // Add it to the scene
-  scene.add(cube);
+  sceneRTT.add(cube);
   var url = "../images/metal.jpg";
   texture = loader.load(url);
 
@@ -277,6 +283,7 @@ async function start()
   scene.add(box);
 
 
+
   var plane = new THREE.Mesh( boxGeometry, material ); // made with boxs for proper shadow
   plane.scale.set(18, 13, 0.1);
   plane.position.set(0, 0, 0);
@@ -285,6 +292,7 @@ async function start()
   plane.receiveShadow = true;
   // Add it to the scene
   scene.add(plane);
+
 
 
 
@@ -307,7 +315,7 @@ async function start()
   rod2.position.set(0.6, 0.6, 0);
   baseDummy.add(rod2);
 
-  //housingDummy is parent of housing and rotor dummy
+  //rodDummy is parent of backing, cylinder, batsymbol, and light
   rodDummy = new THREE.Object3D();
   rodDummy.position.set(0, 1, 0);
   baseDummy.add(rodDummy);
@@ -359,9 +367,100 @@ async function start()
 
   rodDummy.add( spotLight );
 
-
-
   scene.add(baseDummy);
+
+
+
+
+
+
+  var boxGeometry = new THREE.BoxGeometry(1);
+  var material = new THREE.MeshBasicMaterial( { color: 0xffffff, map: rtTexture.texture } );
+  var box = new THREE.Mesh( boxGeometry, material );
+  box.scale.set(13, 10, 0.1);
+  box.position.set(-8.5, 5, 0);
+  box.rotateY(90 * Math.PI / 180);
+  box.castShadow = true;
+  box.receiveShadow = true;
+  // Add it to the scene
+  scene.add(box);
+
+
+  // Put a point light in the scene
+  var light = new THREE.PointLight(0xffffff, 1.0);
+  light.position.set(-2, 3, 5);
+  scene.add(light);
+
+  // Put in an ambient light too
+  light = new THREE.AmbientLight(0x555555);
+  scene.add(light);
+
+  //cube.position.set(0.5, 0, 0);
+
+    // load the six images
+  var ourCubeMap = new THREE.CubeTextureLoader().load( imageNames );
+
+  // this is too easy, don't need a mesh or anything
+  scene.background = ourCubeMap;
+
+  
+
+  
+  renderer.setClearColor(0x00AA00);
+
+
+
+  var render = function () {
+    renderer.setRenderTarget(rtTexture);
+    renderer.render(sceneRTT, cameraRTT); //, rtTexture, true);
+    // render to canvas
+    renderer.setRenderTarget(null);
+    
+
+    renderer.render(scene, camera);
+    var increment = 1 * Math.PI / 180.0;  // convert to radians
+    if (!paused)
+    {
+      
+      if(colorShift != d.getTime() / 2000){
+        colorShift = d.getTime() / 2000;
+        renderer.setClearColor(0x00AA00);
+      }
+
+
+     var q, q2;
+     switch(axis)
+     {
+     case 'x':
+       // create a quaternion representing a rotation about x axis
+       q = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0),  increment);
+
+       // copy the object's current quaternion
+       q2 = new THREE.Quaternion().copy(cube.quaternion);
+
+       // multiply on left and set
+       cube.quaternion.copy(q).multiply(q2);
+       break;
+     case 'y':
+       q = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0),  increment);
+       q2 = new THREE.Quaternion().copy(cube.quaternion);
+       cube.quaternion.copy(q).multiply(q2);
+       break;
+     case 'z':
+       q = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 0, 1),  increment);
+       q2 = new THREE.Quaternion().copy(cube.quaternion);
+       cube.quaternion.copy(q).multiply(q2);
+       break;
+     default:
+     }
+
+
+      requestAnimationFrame( render );
+    }
+  };
+
+  render();
+}
 
 
 
@@ -394,37 +493,9 @@ async function start()
   // scene.add( line );
 
 
-  var boxGeometry = new THREE.BoxGeometry(1);
-  //var material = new THREE.MeshBasicMaterial( { color: 0xffffff, map: rtTexture.texture } );
-  var box = new THREE.Mesh( boxGeometry, material );
-  box.scale.set(20, 10, 0.1);
-  box.position.set(-8.5, 5, 0);
-  box.rotateY(90 * Math.PI / 180);
-  box.castShadow = true;
-  box.receiveShadow = true;
-  // Add it to the scene
-  scene.add(box);
 
 
-  // Put a point light in the scene
-  var light = new THREE.PointLight(0xffffff, 1.0);
-  light.position.set(-2, 3, 5);
-  scene.add(light);
-
-  // Put in an ambient light too
-  light = new THREE.AmbientLight(0x555555);
-  scene.add(light);
-
-  //cube.position.set(0.5, 0, 0);
-
-    // load the six images
-  var ourCubeMap = new THREE.CubeTextureLoader().load( imageNames );
-
-  // this is too easy, don't need a mesh or anything
-  scene.background = ourCubeMap;
-
-  
-  // put another object in the scene
+    // put another object in the scene
   //geometry = new THREE.SphereGeometry(1);
   // geometry = new THREE.SphereGeometry(1, 48, 24);
   // // replaces vertex normals with face normals
@@ -441,24 +512,12 @@ async function start()
   // sphere.name = "mirror";
   // sphere.position.set(0, 3, 0);
   // scene.add(sphere);
-  
 
 
 
 
-  var render = function () {
-    renderer.setRenderTarget(rtTexture);
-    renderer.render(sceneRTT, cameraRTT); //, rtTexture, true);
-    // render to canvas
-    renderer.setRenderTarget(null);
-    renderer.setClearColor(0x444444);
 
-    renderer.render(scene, camera);
-    var increment = 0.5 * Math.PI / 180.0;  // convert to radians
-    if (!paused)
-    {
-
-      // Note about rotations: it is tempting to use cube.rotation.x += increment
+        // Note about rotations: it is tempting to use cube.rotation.x += increment
       // here.  But that won't give the behavior we expect, because threejs uses
       // the 'rotation' attribute as a set of Euler angles, applied in a specific
       // order. See EulerThreejs.js.
@@ -511,36 +570,3 @@ async function start()
       // because those are Euler angles.  Internally, the rotation
       // is stored as a quaternion, and we can left-multiply it by
       // another quaternion to get an extrinsic rotation.
-     var q, q2;
-     switch(axis)
-     {
-     case 'x':
-       // create a quaternion representing a rotation about x axis
-       q = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0),  increment);
-
-       // copy the object's current quaternion
-       q2 = new THREE.Quaternion().copy(cube.quaternion);
-
-       // multiply on left and set
-       cube.quaternion.copy(q).multiply(q2);
-       break;
-     case 'y':
-       q = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0),  increment);
-       q2 = new THREE.Quaternion().copy(cube.quaternion);
-       cube.quaternion.copy(q).multiply(q2);
-       break;
-     case 'z':
-       q = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 0, 1),  increment);
-       q2 = new THREE.Quaternion().copy(cube.quaternion);
-       cube.quaternion.copy(q).multiply(q2);
-       break;
-     default:
-     }
-
-
-      requestAnimationFrame( render );
-    }
-  };
-
-  render();
-}
