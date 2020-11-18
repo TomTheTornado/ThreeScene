@@ -3,7 +3,7 @@
 		<title>Bat Signal</title>
 	</head>
 	<body>
-		<canvas id="theCanvas" width="600" height="400">
+		<canvas id="theCanvas" width="900" height="600">
 	Please use a browser that supports "canvas"
 </canvas>
 
@@ -23,12 +23,13 @@
 	<li><br>
 	<li>1, 2 - Change the skybox
 	<li><br>
+	<li>Space - pause and resume the animations
 	<li>x, y, z - Change the Batman logo to rotate around the x, y, and z, axes, respectively
 	<li>3, 4, 5, 6, 7 - Change the background color behind the Batman logo
 	<li><br>
 	<li>Started with "../threejsexamples/RotatingCubeWithModel.js", I used the camera controls from the examples.
 		I added 2 variations of a skybox, a snow skybox, and a space skybox. After adding all of that I decided on making the bat signal.
-		I found the batman symbol on thingiverse and converted it to and obj and unwrapped its coordinates in blender. I modeled the batman logo in blender by converting an .svg to a mesh and extruding it. I used heirarchy to create the bat signal that way it could be adjusted easily. I added metal textures to the different objects as well. I decided to render the Batman '66 logo in the framebuffer and give the ability to change the background colors of it. I added more spotlights around the bat signal as well, this time showing off different colors of the light.
+		I found the batman symbol on thingiverse and converted it to and obj and unwrapped its coordinates in blender. I modeled the batman logo in blender by converting an .svg to a mesh and extruding it. I used heirarchy to create the bat signal that way it could be adjusted easily. I added metal textures to the different objects as well. I decided to render the Batman '66 logo in the framebuffer and give the ability to change the background colors of it. I animated purple cubes using heirarchy and have a blue spotlight following the top cube. I also added a green spotlight around the batsignal. I didn't add all 6 walls for a room that way it was easier to see the skybox.
 
 	<script src="../three/three.js"></script>
   <script src="../three/OBJLoader.js"></script>

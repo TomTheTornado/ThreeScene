@@ -1,0 +1,31 @@
+Thomas Powell
+HW6 - Create a scene using Three.js
+
+I Started with "../threejsexamples/RotatingCubeWithModel.js", I used the camera controls from the examples.
+I added 2 variations of a skybox, a snow skybox, and a space skybox. After adding all of that I decided on making the bat signal.
+I found the batman symbol on thingiverse and converted it to and obj and unwrapped its coordinates in blender. I modeled the batman logo in blender by converting an .svg to a mesh and extruding it, also in blender. I used heirarchy to create the bat signal that way it could be adjusted easily and controlled. I added metal textures to the different objects as well. I decided to render the Batman '66 logo in the framebuffer and give the ability to change the background colors of it. The purple cubes use heirarchy, are animated, and have a blue spotlight following the top cube. I also added a green spotlight around the batsignal. I didn't add all 6 walls for a room that way it was easier to see the skybox.
+
+Links to resources I used:
+http://web.cs.iastate.edu/~smkautz/cs336f20/examples/threejsexamples/ 
+I used the examples to help with the skybox, textures, camera controls, heirarchy, and using obj
+
+https://www.thingiverse.com/thing:59886 
+Original Bat Symbol mesh, converted to obj in blender
+
+http://1.bp.blogspot.com/-asbP9l26dhQ/VS8iNgibSLI/AAAAAAAASmU/sBYtbAWMHw0/s1600/Batman66.jpg 
+Image I used to make an svg, then convert to mesh in blender
+
+https://threejs.org/docs/#api/en/lights/SpotLight
+Used to figure out how to use the spotlight
+
+https://threejsfundamentals.org/threejs/lessons/threejs-shadows.html
+Used to help figure out how to get the shadows working
+
+https://threejs.org/docs/#api/en/materials/MeshPhongMaterial
+Used to help the material colors come out right
+
+https://threejsfundamentals.org/threejs/lessons/threejs-primitives.html
+Used to help knowing shapes to use
+
+https://stackoverflow.com/questions/58498014/increase-thickness-of-cylinder-in-three-js
+Helped me figure out how to create a hollow cylinder
