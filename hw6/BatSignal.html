@@ -3,7 +3,7 @@
 		<title>Bat Signal</title>
 	</head>
 	<body>
-		<canvas id="theCanvas" width="900" height="600">
+		<canvas id="theCanvas" width="900" height="600"> <!--Size increased from 600 x 400-->
 	Please use a browser that supports "canvas"
 </canvas>
 
@@ -27,13 +27,19 @@
 	<li>x, y, z - Change the Batman logo to rotate around the x, y, and z, axes, respectively
 	<li>3, 4, 5, 6, 7 - Change the background color behind the Batman logo
 	<li><br>
-	<li>Started with "../threejsexamples/RotatingCubeWithModel.js", I used the camera controls from the examples.
-		I added 2 variations of a skybox, a snow skybox, and a space skybox. After adding all of that I decided on making the bat signal.
-		I found the batman symbol on thingiverse and converted it to and obj and unwrapped its coordinates in blender. I modeled the batman logo in blender by converting an .svg to a mesh and extruding it. I used heirarchy to create the bat signal that way it could be adjusted easily. I added metal textures to the different objects as well. I decided to render the Batman '66 logo in the framebuffer and give the ability to change the background colors of it. I animated purple cubes using heirarchy and have a blue spotlight following the top cube. I also added a green spotlight around the batsignal. I didn't add all 6 walls for a room that way it was easier to see the skybox.
+	<li>I started with "../threejsexamples/RotatingCubeWithModel.js", I used the camera controls from the examples.
+		2 variations of a skybox were present, a snow skybox, and a space skybox. After adding all of that I decided on making the bat signal.
+		The batman symbol was found on thingiverse and converted to and obj and unwrapped its coordinates in blender. 
+		The batman logo was modeled in blender by converting an .svg to a mesh and extruding it, also in blender. 
+		I used heirarchy to create the bat signal that way it could be adjusted easily and controlled. 
+		Metal textures were addedto the different objects as well. 
+		I decided to render the Batman '66 logo in the framebuffer and give the ability to change the background colors of it. 
+		The purple cubes use heirarchy, are animated, and have a blue spotlight following the top cube. 
+		I also added a green spotlight around the batsignal. Though I didn't add all 6 walls for a room that way it was easier to see the skybox.
 
-	<script src="../three/three.js"></script>
-  <script src="../three/OBJLoader.js"></script>
-		<script src="BatSignal.js"></script>
-		<script>window.onload = start</script>
+	<script src="three/three.js"></script>
+  	<script src="three/OBJLoader.js"></script>
+	<script src="BatSignal.js"></script>
+	<script>window.onload = start</script>
 	</body>
 </html>

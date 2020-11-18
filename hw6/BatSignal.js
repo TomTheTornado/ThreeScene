@@ -31,12 +31,12 @@ function loadOBJPromise(filename)
   );
 }
 
-batarangFile = "../models/batarang.obj";
-logoFile = "../models/logo66.obj"
+batarangFile = "batarang.obj";
+logoFile = "logo66.obj"
 
 var OFFSCREEN_SIZE = 512;
 
-var path = "../images/winter/winterskyday";
+var path = "images/winter/winterskyday";
 var imageNames = [
                   path + "lf.bmp",
                   path + "rt.bmp",
@@ -191,13 +191,13 @@ function handleKeyPress(event)
 
   //Handles the skybox change
   case '1':
-    path = "../images/winter/winterskyday";
+    path = "images/winter/winterskyday";
     imageNames = [path + "lf.bmp", path + "rt.bmp", path + "up.bmp", path + "dn.bmp", path + "ft.bmp", path + "bk.bmp"];
     var ourCubeMap = new THREE.CubeTextureLoader().load( imageNames );
     scene.background = ourCubeMap;
     break;
   case '2':
-    path = "../images/stars/Stargate";
+    path = "images/stars/Stargate";
     imageNames = [path + "lf.bmp", path + "rt.bmp", path + "up.bmp", path + "dn.bmp", path + "ft.bmp", path + "bk.bmp"];
       var ourCubeMap = new THREE.CubeTextureLoader().load( imageNames );
       scene.background = ourCubeMap;
@@ -260,7 +260,7 @@ async function start()
   
   /**-----------------------------Batman Logo for the Framebuffer------------------------- */
 
-  var url = "../images/metal3.jpg"; 
+  var url = "images/metal2.jpg"; 
   var loader = new THREE.TextureLoader();
   var texture = loader.load(url);
   var geometry = await loadOBJPromise(logoFile);
@@ -276,7 +276,7 @@ async function start()
   /**-----------------------------Regular Walls in the Scene------------------------- */
 
   var material = new THREE.MeshPhongMaterial( { map:texture, color: 0xffff00, specular: 0x222222, shininess: 10} );
-  var url = "../images/metal.jpg";
+  var url = "images/metal.jpg";
   texture = loader.load(url);
 
   //Wall plane on the positive x axis
@@ -299,7 +299,7 @@ async function start()
   plane2.rotateY(-90 * Math.PI / 180);
    scene.add(plane2);// Add it to the scene
 
-  var url = "../images/metal3.jpg"; 
+  var url = "images/metal2.jpg"; 
   var loader = new THREE.TextureLoader();
   var texture = loader.load(url);
   var material = new THREE.MeshPhongMaterial( { map:texture, color: 0xffffff, specular: 0x222222, shininess: 10} );
@@ -318,7 +318,7 @@ async function start()
 
   /**-----------------------------Bat Signal in the Scene------------------------- */
 
-  var url = "../images/metal.jpg"; //loading the 
+  var url = "images/metal.jpg"; //loading the 
   var loader = new THREE.TextureLoader();
   var texture = loader.load(url);
   var material = new THREE.MeshPhongMaterial( { map:texture, color: 0xffff00, specular: 0x222222, shininess: 10} );
@@ -545,25 +545,7 @@ async function start()
     var increment = 1 * Math.PI / 180.0;  // convert to radians
     if (!paused)
     {
-      //Switches the logo color in the frame buffer
-      switch(logoColor){
-        case 'g':
-          renderer.setClearColor(0x00AA00);
-          break;
-        case 'y':
-          renderer.setClearColor(0xFFF82B);
-          break;
-        case 'b':
-          renderer.setClearColor(0x007BFF);
-          break;
-        case 'r':
-          renderer.setClearColor(0xDD0000);
-          break;
-        case 'p':
-          renderer.setClearColor(0xAA00AA);
-          break;
-        default:
-      }
+
       //Animating the purple cubes
       if(animate){ 
         degrees++;
@@ -612,6 +594,26 @@ async function start()
 
 
     }
+    //Switches the logo color in the frame buffer
+    switch(logoColor){
+      case 'g':
+        renderer.setClearColor(0x00AA00);
+        break;
+      case 'y':
+        renderer.setClearColor(0xFFF82B);
+        break;
+      case 'b':
+        renderer.setClearColor(0x007BFF);
+        break;
+      case 'r':
+        renderer.setClearColor(0xDD0000);
+        break;
+      case 'p':
+        renderer.setClearColor(0xAA00AA);
+        break;
+      default:
+    }
+
     requestAnimationFrame( render );
   };
 
