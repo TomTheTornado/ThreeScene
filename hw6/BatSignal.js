@@ -309,7 +309,7 @@ async function start()
   plane3.scale.set(20, 13, 0.1);
   plane3.position.set(0, 0, 0);
   plane3.rotateX(-90 * Math.PI / 180);
-  plane3.castShadow = true;
+  //plane3.castShadow = true;
   plane3.receiveShadow = true;
   scene.add(plane3);// Add it to the scene
   
@@ -433,8 +433,8 @@ async function start()
 
   //Box dummy parent of boxdummy2 and box1
   var boxDummy = new THREE.Object3D();
-  boxDummy.position.set(7, 1, 0);
-  var material = new THREE.MeshBasicMaterial( {  map:texture, color: 0x6a0dad, specular: 0x222222, shininess: 75} );
+  boxDummy.position.set(7, 1, 0); 
+  var material = new THREE.MeshPhongMaterial( {  map:texture, color: 0x6a0dad, specular: 0x222222, shininess: 75} );
   var box1 = new THREE.Mesh( geometryBox, material );
   box1.position.set(0, 0.5, 0);
   box1.castShadow = true;
