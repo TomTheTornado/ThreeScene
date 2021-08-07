@@ -8,7 +8,10 @@
 </canvas>
 
 <ul style="list-style:none;">
-	<li>Camera Controls
+	<li>Just a heads up, sometimes the models might be in the wrong positions and you have to reload.
+	<br/>
+	
+	<li>Camera Controls 
 	<li>w, a, s, d - move forward, left, back, right
 	<li>r, f - move up, down
 	<li>i, j, k, l - look up, left, down, right
@@ -26,7 +29,10 @@
 	<li>Space - pause and resume the animations
 	<li>x, y, z - Change the Batman logo to rotate around the x, y, and z, axes, respectively
 	<li>3, 4, 5, 6, 7 - Change the background color behind the Batman logo
-	<li><br>
+	<li><br/>
+	<li><a href="https://github.com/TomTheTornado/ThreeScene">Github Repo</a>	
+	<li><br/>
+	<li><b>How I Did It</b>
 	<li>I started with "../threejsexamples/RotatingCubeWithModel.js", I used the camera controls from the examples.
 		2 variations of a skybox were present, a snow skybox, and a space skybox. After adding all of that I decided on making the bat signal.
 		The batman symbol was found on thingiverse and converted to and obj and unwrapped its coordinates in blender. 
@@ -36,6 +42,9 @@
 		I decided to render the Batman '66 logo in the framebuffer and give the ability to change the background colors of it. 
 		The purple cubes use heirarchy, are animated, and have a blue spotlight following the top cube. 
 		I also added a green spotlight around the batsignal. Though I didn't add all 6 walls for a room that way it was easier to see the skybox.
+
+	
+
 
 	<script src="three/three.js"></script>
   	<script src="three/OBJLoader.js"></script>
